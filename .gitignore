@@ -1,1 +1,15 @@
-/.idea
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+/node_modules
+/packages/*/node_modules
+
+# dotenv environment variables file
+.env
+
+# Mac files
+.DS_Store
+

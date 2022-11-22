@@ -1,7 +1,7 @@
 {
   "id": "TinyMCE",
   "name": "TinyMCE",
-  "src": "https://www.raysync.io/extension.html",
+  "src": "https://www.raysync.io/tinymce-contentful/extension.html",
   "fieldTypes": ["Text"],
   "parameters": {
     "installation": [],

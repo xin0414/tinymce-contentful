@@ -76,6 +76,9 @@ window.contentfulExtension.init(function (api) {
       autoresize_bottom_margin: 15,
       resize: false,
       image_caption: true,
+      relative_urls: false,
+      remove_script_host: false,
+      convert_urls: true,
       images_upload_handler: images_upload_handler,
       init_instance_callback: function (editor) {
         var listening = true
@@ -133,6 +136,7 @@ window.contentfulExtension.init(function (api) {
   function loadScript(src, onload) {
     var script = document.createElement('script')
     script.setAttribute('src', src)
+    script.setAttribute('referrerpolicy', 'origin')
     script.onload = onload
     document.body.appendChild(script)
   }

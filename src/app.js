@@ -21,7 +21,7 @@ app.post('/tinymce-contenful/image-upload', (req, res) => {
     const { image } = req.files
     if (!image) return res.sendStatus(400)
     const fileName = `${image.md5}_${image.name}`
-    image.mv(__dirname + '/images/' + fileName)
+    image.mv('/opt/raysync-software-site/src/images/' + fileName)
     const location = `https://www.raysync.io/tinymce-contentful/images/${fileName}`
     res.status(200).send({ location })
   } catch (e) {
@@ -30,6 +30,6 @@ app.post('/tinymce-contenful/image-upload', (req, res) => {
   }
 })
 
-app.listen(300, () => {
-  console.log(`Example app listening on port ${port}`)
+app.listen(3000, () => {
+  console.log(`Example app listening on port 3000`)
 })

@@ -21,7 +21,7 @@ app.post('/tinymce-contenful/image-upload', (req, res) => {
     const { image } = req.files
     if (!image) return res.sendStatus(400)
     const fileName = `${image.md5}_${image.name}`
-    image.mv('/opt/raysync-software-site/src/images/' + fileName)
+    image.mv('/opt/raysync-software-site/tinymce-contenful/src/images/' + fileName)
     const location = `https://www.raysync.io/tinymce-contentful/images/${fileName}`
     res.status(200).send({ location })
   } catch (e) {

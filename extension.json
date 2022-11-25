@@ -4,7 +4,32 @@
   "src": "https://www.raysync.io/tinymce-contentful/extension.html",
   "fieldTypes": ["Text"],
   "parameters": {
-    "installation": [],
+    "installation": [
+      {
+        "id": "imagePath",
+        "type": "Symbol",
+        "name": "Image path",
+        "description": "",
+        "required": false,
+        "default": "/opt/raysync-software-site/tinymce-contentful/src/images"
+      },
+      {
+        "id": "imageLocation",
+        "type": "Symbol",
+        "name": "Image location",
+        "description": "",
+        "required": false,
+        "default": "https://www.raysync.io/tinymce-contentful/images"
+      },
+      {
+        "id": "imageUploadApi",
+        "type": "Symbol",
+        "name": "Image upload API",
+        "description": "",
+        "required": false,
+        "default": "https://www.raysync.io/tinymce-contentful/image-upload"
+      }
+    ],
     "instance": []
   }
 }

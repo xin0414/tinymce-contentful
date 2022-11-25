@@ -13,23 +13,28 @@ app.use(
 
 app.all('*', function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With')
   next()
 })
 
-app.post('/tinymce-contenful/image-upload', (req, res) => {
+const getFullPath = (path = '', filename = '') => {
+  return `${path}${!path.endsWith('/') ? '/' : ''}${filename}`
+}
+
+app.post('/tinymce-contentful/image-upload', (req, res) => {
   try {
     const { image } = req.files
-    if (!image) return res.sendStatus(400)
+    const { imagePath, imageLocation } = req.body
+    if (!image || !imageLocation || !imagePath) return res.sendStatus(400)
     const fileName = `${image.md5}_${image.name}`
-    image.mv('/opt/raysync-software-site/tinymce-contenful/src/images/' + fileName)
-    const location = `https://www.raysync.io/tinymce-contentful/images/${fileName}`
-    res.status(200).send({ location })
+    image.mv(getFullPath(imagePath, fileName))
+    res.status(200).send({ location: getFullPath(imageLocation, fileName) })
   } catch (e) {
-    console.log(e)
     res.status(500).send({ e: JSON.stringify(e) })
   }
 })
 
 app.listen(3000, () => {
-  console.log(`Example app listening on port 3000`)
+  console.log(`server listening on port 3000`)
 })

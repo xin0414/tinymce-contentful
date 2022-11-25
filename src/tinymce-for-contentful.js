@@ -1,39 +1,19 @@
-const images_upload_handler = (blobInfo, progress) =>
-  new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.withCredentials = false
-    xhr.open('POST', 'https://www.raysync.io/tinymce-contenful/image-upload')
-
-    xhr.upload.onprogress = (e) => {
-      progress((e.loaded / e.total) * 100)
-    }
-    xhr.onload = () => {
-      if (xhr.status === 403) {
-        reject({ message: 'HTTP Error: ' + xhr.status, remove: true })
-        return
-      }
-      if (xhr.status < 200 || xhr.status >= 300) {
-        reject('HTTP Error: ' + xhr.status + ',' + xhr.responseText)
-        return
-      }
-      const json = JSON.parse(xhr.responseText)
-      if (!json || typeof json.location != 'string') {
-        reject('Invalid JSON: ' + xhr.responseText)
-        return
-      }
-      resolve(json.location)
-    }
-    xhr.onerror = () => {
-      reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status)
-    }
-    const formData = new FormData()
-    formData.append('image', blobInfo.blob(), blobInfo.filename())
-
-    xhr.send(formData)
-  })
+function tweak(param) {
+  var t = param.trim()
+  if (t === 'false') {
+    return false
+  } else if (t === '') {
+    return undefined
+  } else {
+    return t
+  }
+}
 window.contentfulExtension.init(function (api) {
   function tinymceForContentful(api) {
     api.window.startAutoResizer()
+    const imagePath = api.parameters.installation.imagePath
+    const imageLocation = api.parameters.installation.imageLocation
+    const imageUploadApi = api.parameters.installation.imageUploadApi
     tinymce.init({
       selector: '#editor',
       language: 'zh-Hans',
@@ -79,7 +59,41 @@ window.contentfulExtension.init(function (api) {
       relative_urls: false,
       remove_script_host: false,
       convert_urls: true,
-      images_upload_handler: images_upload_handler,
+      images_upload_handler: (blobInfo, progress) =>
+        new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest()
+          xhr.withCredentials = false
+          xhr.open('POST', imageUploadApi)
+
+          xhr.upload.onprogress = (e) => {
+            progress((e.loaded / e.total) * 100)
+          }
+          xhr.onload = () => {
+            if (xhr.status === 403) {
+              reject({ message: 'HTTP Error: ' + xhr.status, remove: true })
+              return
+            }
+            if (xhr.status < 200 || xhr.status >= 300) {
+              reject('HTTP Error: ' + xhr.status + ',' + xhr.responseText)
+              return
+            }
+            const json = JSON.parse(xhr.responseText)
+            if (!json || typeof json.location != 'string') {
+              reject('Invalid JSON: ' + xhr.responseText)
+              return
+            }
+            resolve(json.location)
+          }
+          xhr.onerror = () => {
+            reject('Image upload failed due to a XHR Transport error. Code: ' + xhr.status)
+          }
+          const formData = new FormData()
+          formData.append('image', blobInfo.blob(), blobInfo.filename())
+          formData.append('imagePath', imagePath)
+          formData.append('imageLocation', imageLocation)
+
+          xhr.send(formData)
+        }),
       init_instance_callback: function (editor) {
         var listening = true
 

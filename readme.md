@@ -13,5 +13,5 @@ location ^~ /tinymce-contentful {
 启动 Node 服务:
 
 ```
-pm2 start ./src/app.js --name tinymce-image-upload
+pm2 start ./src/app.js --name contentful-image
 ```
